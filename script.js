@@ -39,98 +39,52 @@ const updateUI = (e, obj = list) => {
         curr.id = i + 1
     })
 
-    console.log(e?.target.id);
+    // console.log(e?.target.id);
+    main.innerHTML = '';
+    let html;
+    obj.forEach((curr, i) => {
+        html = `
+            <div class="listContainer">
+            <div>
+                <input type="checkbox" id="list${curr.id}" name="list${curr.id}" class="list">
+                <label for="list${curr.id}">${curr.task}</label>
+            </div>
+            <div>
+                <img id="edit" src="Icon/edit.png" alt="">
+                <img src="Icon/backspace-arrow.png" alt="">
+            </div>
+            </div>`
+            main.insertAdjacentHTML('afterbegin', html);
+    })
 
-
-    switch (e?.target.id) {
-        case 'activebtn':
-            main.innerHTML = '';
-            obj.forEach((curr, i) => {
-                let html = `
-                    <div class="listContainer">
-                    <div>
-                        <input type="checkbox" id="list${curr.id}" name="list${curr.id}" class="list">
-                        <label for="list${curr.id}">${curr.task}</label>
-                    </div>
-                    <div>
-                        <img id="edit" src="Icon/edit.png" alt="">
-                        <img src="Icon/backspace-arrow.png" alt="">
-                    </div>
-                    </div>`
-
-                if(curr.active){
-                    main.insertAdjacentHTML('afterbegin', html);
-                }
-            })
-        break;
-
-        case 'completebtn':
-            main.innerHTML = '';
-            obj.forEach((curr, i) => {
-                let html = `
-                    <div class="listContainer">
-                    <div>
-                        <input type="checkbox" id="list${curr.id}" name="list${curr.id}" class="list">
-                        <label for="list${curr.id}">${curr.task}</label>
-                    </div>
-                    <div>
-                        <img id="edit" src="Icon/edit.png" alt="">
-                        <img src="Icon/backspace-arrow.png" alt="">
-                    </div>
-                    </div>`
-                if(!curr.active){
-                    main.insertAdjacentHTML('afterbegin', html);
-                }
-            })
-        break;
-
-        default:
-            main.innerHTML = '';
-            obj.forEach((curr, i) => {
-                let html = `
-                    <div class="listContainer">
-                    <div>
-                        <input type="checkbox" id="list${curr.id}" name="list${curr.id}" class="list">
-                        <label for="list${curr.id}">${curr.task}</label>
-                    </div>
-                    <div>
-                        <img id="edit" src="Icon/edit.png" alt="">
-                        <img src="Icon/backspace-arrow.png" alt="">
-                    </div>
-                    </div>`
-                main.insertAdjacentHTML('afterbegin', html);
-            })
-        break;
-    }
-
+    
 
     listElement = document.querySelectorAll('.list');
-
-    listElement.forEach((curr) => {
-        curr.addEventListener('change', () => {
-            list.find((item) => item.id == curr.id.slice(-1)).toggle();
-        })
-    })
+    console.log(listElement);
+    console.log(obj);
 
     obj.forEach(li => {
         li.toggle = function () {
             this.active = !this.active;
         }
         if (!li.active) {
+            console.log(li.id, document.querySelector(`#list${li.id}`));
             document.querySelector(`#list${li.id}`).checked = true;
         }
+    })
+
+    listElement.forEach((curr) => {
+        curr.addEventListener('change', () => {
+            list.find((item) => item.id == curr.id.slice(-1)).toggle();
+        })
     })
 }
 
 const checkExist = (search) => {
     let arrObj = [];
-    // console.log('check',search);
-
     list.forEach((curr) => {
         arrObj.push(Object.values(curr));
     })
-    // console.log(arrObj.flat());
-    // console.log(arrObj.flat().includes(search));
     return arrObj.flat().includes(search)
 }
 
@@ -153,8 +107,8 @@ const addHandler = () => {
     todoInput.removeEventListener('keyup', searchHandler);
     noData.hidden = true;
     todoInput.hidden = false;
-    updateUI(undefined);
     todoInput.focus();
+    updateUI(undefined)
     todoInput.addEventListener('keyup', addList);
 }
 add.addEventListener('click', addHandler);
@@ -195,11 +149,11 @@ const selectionHandler = () => {
             break;
 
         case 'unselect':
-            updateUI(undefined);
+            console.log(list);
             list.forEach((curr, i) => {
                 document.querySelector(`#list${curr.id}`).checked = false;
-                curr.active = true
-                curr.completed = false
+                curr.active = true;
+                console.log("unsel");
             })
 
             break;
@@ -208,7 +162,6 @@ const selectionHandler = () => {
             updateUI(undefined);
             list.forEach((curr) => {
                 document.querySelector(`#list${curr.id}`).checked = true;
-                curr.completed = true
                 curr.active = false
             })
             break;
@@ -239,6 +192,7 @@ const sortHandler = () => {
         case 'Z-A':
             updateUI(undefined, sortedList);
             break;
+
         case 'newest':
             updateUI(undefined, list)
             break;
