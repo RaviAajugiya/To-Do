@@ -57,7 +57,7 @@ const updateUI = (e, obj = list) => {
             main.insertAdjacentHTML('afterbegin', html);
     })
 
-    
+
 
     listElement = document.querySelectorAll('.list');
     console.log(listElement);
@@ -67,10 +67,10 @@ const updateUI = (e, obj = list) => {
         li.toggle = function () {
             this.active = !this.active;
         }
-        if (!li.active) {
-            console.log(li.id, document.querySelector(`#list${li.id}`));
-            document.querySelector(`#list${li.id}`).checked = true;
-        }
+        // if (!li.active) {
+        //     console.log(li.id, document.querySelector(`#list${li.id}`));
+        //     document.querySelector(`#list${li.id}`).checked = true;
+        // }
     })
 
     listElement.forEach((curr) => {
