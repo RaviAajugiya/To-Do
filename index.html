@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div>
+        <h1> TODO LIST</h1>
+    </div>
+    <section>
+        <div class="inputField">
+            <input type="text" name="todo" id="todo">
+        </div>
+        <h3>No data Found</h3>
+        <div class="main">
+            
+        </div>
+        <footer>
+            <div class="footerContainer">
+                <img id="add" src="Icon/plus.png" alt="">
+                <img id="search" src="Icon/search.png" alt="">
+            </div>
+            <div class="footerContainer">
+                <div class="select">
+                    <select name="select" id="select">
+                        <option value="Action" disabled selected hidden>Action</option>
+                        <option value="select">Select All</option>
+                        <option value="unselect">Unselect All</option>
+                        <option value="delete">Delete All Selected</option>
+                    </select>
+                </div>
+                <div class="sort">
+                    <select name="sort" id="sort">
+                        <option value="Action" disabled selected hidden>Sort</option>
+                        <option value="A-Z">A-Z</option>
+                        <option value="Z-A">Z-A</option>
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="footerContainer">
+                <div>
+                    <button id="allbtn">All</button>
+                    <button id="activebtn">Active</button>
+                    <button id="completebtn">Completed</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
