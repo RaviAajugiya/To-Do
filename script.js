@@ -28,7 +28,7 @@ todoInput.hidden = true
 // })
 
 const updateUI = (e, obj = list) => {
-    console.log('ui');
+    console.log('ui',obj);
     if (obj.length == 0) {
         noData.hidden = false;
     } else {
@@ -54,7 +54,7 @@ const updateUI = (e, obj = list) => {
                 <img src="Icon/backspace-arrow.png" alt="">
             </div>
             </div>`
-            main.insertAdjacentHTML('afterbegin', html);
+        main.insertAdjacentHTML('afterbegin', html);
     })
 
 
@@ -67,10 +67,10 @@ const updateUI = (e, obj = list) => {
         li.toggle = function () {
             this.active = !this.active;
         }
-        // if (!li.active) {
-        //     console.log(li.id, document.querySelector(`#list${li.id}`));
-        //     document.querySelector(`#list${li.id}`).checked = true;
-        // }
+        if (!li.active) {
+            console.log(li.id, document.querySelector(`#list${li.id}`));
+            document.querySelector(`#list${li.id}`).checked = true;
+        }
     })
 
     listElement.forEach((curr) => {
@@ -98,7 +98,7 @@ const addList = (e) => {
         });
         // console.log(list);
         todoInput.value = '';
-        updateUI(undefined);
+        updateUI(undefined, activeFind());
         noData.hidden = true;
     }
 }
@@ -108,7 +108,7 @@ const addHandler = () => {
     noData.hidden = true;
     todoInput.hidden = false;
     todoInput.focus();
-    updateUI(undefined)
+    updateUI(undefined, activeFind());
     todoInput.addEventListener('keyup', addList);
 }
 add.addEventListener('click', addHandler);
@@ -117,7 +117,9 @@ add.addEventListener('click', addHandler);
 const searchHandler = (e) => {
     if (e.key === 'Enter' && checkExist(todoInput.value.trim())) {
         updateUI(undefined, [{
-            task: `${todoInput.value.trim()}`
+            task: `${todoInput.value.trim()}`,
+            active: true,
+            completed: false
         }]);
     } else if (e.key === 'Enter' && !list.includes(todoInput.value.trim())) {
         todoInput.value = '';
@@ -239,6 +241,29 @@ sort.addEventListener('change', sortHandler);
 
 // allBtn.addEventListener('click', allHandler);
 
+let activeFind  = () => {
+    return list.filter(curr => curr.active);
+}  
+
 allBtn.addEventListener('click', updateUI);
-activeBtn.addEventListener('click', updateUI);
-completeBtn.addEventListener('click', updateUI);
+activeBtn.addEventListener('click', () => {
+    console.log('act',active);
+    updateUI(undefined, activeFind());
+});
+
+completeBtn.addEventListener('click', () => {
+    completed = list.filter(curr => !curr.active)
+    console.log('comp', completed);
+    updateUI(undefined, completed);
+});
+
+
+// obj.forEach(li => {
+//     li.toggle = function () {
+//         this.active = !this.active;
+//     }
+//     if (!li.active) {
+//         console.log(li.id, document.querySelector(`#list${li.id}`));
+//         document.querySelector(`#list${li.id}`).checked = true;
+//     }
+// })
