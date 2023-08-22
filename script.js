@@ -139,10 +139,10 @@ const sortHandler = () => {
             break;
 
         case 'newest':
-            updateUI(undefined, listtime.slice().reverse())
+            updateUI(undefined, listtime)
             break;
         case 'oldest':
-            updateUI(undefined, listtime)
+            updateUI(undefined, listtime.slice().reverse())
             break;
     }
 }
