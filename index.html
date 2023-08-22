@@ -18,7 +18,17 @@
         </div>
         <h3>No data Found</h3>
         <div class="main">
-            
+            <!-- <div class="listContainer">
+                <div class="left">
+                    <input type="checkbox" id="list${curr.id}" name="list${curr.id}" class="list">
+                    <label for="list${curr.id}">${curr.task}</label>
+                    <input hidden type="text" id="edit1" class="edit">
+                </div>
+                <div class="right">
+                    <img id="edit${curr.id}" class="edit" src="Icon/edit.png" alt="">
+                    <img id="delete${curr.id}" class="delete" src="Icon/backspace-arrow.png" alt="">
+                </div>
+            </div> -->
         </div>
         <footer>
             <div class="footerContainer">
@@ -28,7 +38,7 @@
             <div class="footerContainer">
                 <div class="select">
                     <select name="select" id="select">
-                        <option value="Action" disabled selected hidden>Action</option>
+                        <option value="Action" >Action</option>
                         <option value="select">Select All</option>
                         <option value="unselect">Unselect All</option>
                         <option value="delete">Delete All Selected</option>
@@ -36,7 +46,7 @@
                 </div>
                 <div class="sort">
                     <select name="sort" id="sort">
-                        <option value="Action" disabled selected hidden>Sort</option>
+                        <option value="Action" selected>Sort</option>
                         <option value="A-Z">A-Z</option>
                         <option value="Z-A">Z-A</option>
                         <option value="newest">Newest</option>

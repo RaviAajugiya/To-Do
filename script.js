@@ -13,6 +13,8 @@ const main = document.querySelector('.main');
 const select = document.getElementById('select');
 const sort = document.getElementById('sort');
 let listElement;
+let listEdit;
+let listDelete;
 
 let list = [];
 let active = [];
@@ -28,7 +30,8 @@ todoInput.hidden = true
 // })
 
 const updateUI = (e, obj = list) => {
-    console.log('ui',obj);
+    updateUI.currList = obj;
+    // console.log('ui', obj);
     if (obj.length == 0) {
         noData.hidden = false;
     } else {
@@ -43,25 +46,37 @@ const updateUI = (e, obj = list) => {
     main.innerHTML = '';
     let html;
     obj.forEach((curr, i) => {
-        html = `
-            <div class="listContainer">
-            <div>
-                <input type="checkbox" id="list${curr.id}" name="list${curr.id}" class="list">
-                <label for="list${curr.id}">${curr.task}</label>
-            </div>
-            <div>
-                <img id="edit" src="Icon/edit.png" alt="">
-                <img src="Icon/backspace-arrow.png" alt="">
-            </div>
-            </div>`
+        html = `<div class="listContainer">
+                    <div class="left">
+                        <input type="checkbox" id="list${curr.id}" name="list${curr.id}" class="list">
+                        <label id="label${curr.id}" for="list${curr.id}">${curr.task}</label>
+                        <input hidden type="text" id="areaedit${curr.id}" class="areaedit">
+                    </div>
+                    <div class="right">
+                        <img id="edit${curr.id}" class="edit" src="Icon/edit.png" alt="">
+                        <img id="delete${curr.id}" class="delete" src="Icon/backspace-arrow.png" alt="">
+                    </div>
+                </div>`
+
         main.insertAdjacentHTML('afterbegin', html);
     })
 
-
-
     listElement = document.querySelectorAll('.list');
-    console.log(listElement);
-    console.log(obj);
+
+    listEdit = document.querySelectorAll('.edit');
+    listEdit.forEach((li) => {
+        li.addEventListener('click', editHandle)
+    })
+
+    listDelete = document.querySelectorAll('.delete');
+    listDelete.forEach((li) => {
+        li.addEventListener('click', delHandle)
+    })
+    // console.log(listDelete, listEdit);
+
+
+    // console.log(listElement);
+    // console.log(obj);
 
     obj.forEach(li => {
         li.toggle = function () {
@@ -80,6 +95,88 @@ const updateUI = (e, obj = list) => {
     })
 }
 
+
+const sortHandler = () => {
+    let listCopy = updateUI.currList.slice();
+        listCopy.sort((a, b) => {
+            if (!isNaN(a.task) && !isNaN(b.task)) {
+                return parseInt(a.task) - parseInt(b.task);
+            }
+            if (!isNaN(a.task)) {
+                return -1;
+            }
+            if (!isNaN(b.task)) {
+                return 1;
+            }
+            return a.task.localeCompare(b.task);
+        });
+    console.log('lc',listCopy);
+
+    let listtime = updateUI.currList.slice();
+        listtime.sort((a, b) => {
+            if (!isNaN(a.time) && !isNaN(b.time)) {
+                return parseInt(a.time) - parseInt(b.time);
+            }
+            if (!isNaN(a.time)) {
+                return -1;
+            }
+            if (!isNaN(b.time)) {
+                return 1;
+            }
+            return a.time.localeCompare(b.time);
+        });
+
+        console.log('obj', updateUI.currList);
+        console.log('listtime',listtime);
+
+    let sortType = sort.value;
+    switch (sortType) {
+        case 'A-Z':
+            updateUI(undefined, listCopy.reverse());
+            break;
+        case 'Z-A':
+            updateUI(undefined, listCopy);
+            break;
+
+        case 'newest':
+            updateUI(undefined, listtime.slice().reverse())
+            break;
+        case 'oldest':
+            updateUI(undefined, listtime)
+            break;
+    }
+}
+sort.addEventListener('change', sortHandler);
+
+
+const editHandle = (e) => {
+    let editid = e.target.id.slice(-1);
+    let editInput = document.querySelector(`#area${e.target.id}`);
+    editInput.hidden = false;
+    editInput.focus();
+
+    let labeledit = document.querySelector(`#label${e.target.id.slice(-1)}`);
+    labeledit.hidden = true;
+    console.log('editinp', editInput);
+
+    editInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+            labeledit.hidden = false;
+            list.find((item) => item.id == editid).task = labeledit.textContent = editInput.value;
+            editInput.hidden = true;
+        }
+    })
+}
+
+const delHandle = (e) => {
+    let delId = e.target.id.slice(-1)
+    console.log(delId);
+    console.log(list.findIndex((item) => item.id == delId));
+    list.splice(list.findIndex((item) => item.id == delId), 1);
+    updateUI(undefined)
+
+}
+
 const checkExist = (search) => {
     let arrObj = [];
     list.forEach((curr) => {
@@ -89,17 +186,22 @@ const checkExist = (search) => {
 }
 
 //add functionalaity
+let counter = 0;
 const addList = (e) => {
     if (e.key === 'Enter' && todoInput.value.trim() != '' && !checkExist(todoInput.value.trim())) {
+        counter++;
+        // console.log(counter);
         list.push({
             task: `${todoInput.value.trim()}`,
             active: true,
-            completed: false
+            time: counter
         });
+
         // console.log(list);
         todoInput.value = '';
         updateUI(undefined, activeFind());
         noData.hidden = true;
+
     }
 }
 
@@ -161,7 +263,6 @@ const selectionHandler = () => {
             break;
 
         case 'select':
-            updateUI(undefined);
             list.forEach((curr) => {
                 document.querySelector(`#list${curr.id}`).checked = true;
                 curr.active = false
@@ -169,85 +270,18 @@ const selectionHandler = () => {
             break;
     }
 
+
 }
 
 select.addEventListener('change', selectionHandler);
 
-const sortHandler = () => {
-    let mixList = list.map((curr) => Number(curr.task) || curr.task);
-    let numList = mixList.filter((curr) => typeof (curr) == 'number').sort((a, b) => b - a);
-    let strList = mixList.filter((curr) => typeof (curr) == 'string').sort();
-    let sortedList = [...numList, ...strList].map(curr => {
-        return {
-            id: 'temp',
-            task: curr,
-            active: true,
-            completed: false
-        }
-    });
-
-    let sortType = sort.value;
-    switch (sortType) {
-        case 'A-Z':
-            updateUI(undefined, sortedList.reverse());
-            break;
-        case 'Z-A':
-            updateUI(undefined, sortedList);
-            break;
-
-        case 'newest':
-            updateUI(undefined, list)
-            break;
-        case 'oldest':
-            updateUI(undefined, list.slice().reverse())
-            break;
-    }
-}
-sort.addEventListener('change', sortHandler);
-
-
-
-// const activeHandler = () => {
-//     list.forEach((curr) => {
-//         if(document.querySelector(`#list${curr.id}`).checked){
-//             console.log(curr.id);
-//             curr.active = false;
-//             curr.completed = true;
-//         }
-//     })
-//     active = list.filter(curr => curr.active)
-//     updateUI(active)
-// }
-
-// activeBtn.addEventListener('click', activeHandler);
-
-// const completeHandler = () => {
-//     list.forEach((curr) => {
-//         if(document.querySelector(`#list${curr.id}`).checked){
-//             console.log(curr.id);
-//             curr.active = false;
-//             curr.completed = true;
-//         }
-//     })
-//     completed = list.filter(curr => !curr.active)
-//     updateUI(completed)
-// }
-
-// completeBtn.addEventListener('click', completeHandler);
-
-// const allHandler = () => {
-//     updateUI();
-// }
-
-// allBtn.addEventListener('click', allHandler);
-
-let activeFind  = () => {
+let activeFind = () => {
     return list.filter(curr => curr.active);
-}  
+}
 
 allBtn.addEventListener('click', updateUI);
 activeBtn.addEventListener('click', () => {
-    console.log('act',active);
+    console.log('act', active);
     updateUI(undefined, activeFind());
 });
 
@@ -258,12 +292,44 @@ completeBtn.addEventListener('click', () => {
 });
 
 
-// obj.forEach(li => {
-//     li.toggle = function () {
-//         this.active = !this.active;
-//     }
-//     if (!li.active) {
-//         console.log(li.id, document.querySelector(`#list${li.id}`));
-//         document.querySelector(`#list${li.id}`).checked = true;
-//     }
-// })
+
+
+        // listtime.sort((a, b) => {
+        //     if (!isNaN(a.time) && !isNaN(b.time)) {
+        //         return parseInt(a.key) - parseInt(b.time);
+        //     }
+        //     if (!isNaN(a.time)) {
+        //         return -1;
+        //     }
+        //     if (!isNaN(b.time)) {
+        //         return 1;
+        //     }
+        //     return a.time.localeCompare(b.time);
+        // });
+
+        // console.log(listtime);
+
+
+// let listCopy = [
+//     {task: '5'},
+//     {task: 'zds'},
+//     {task: 'ewr'},
+//     {task: 'as5'},
+//     {task: '35'}
+// ];
+
+// let li = listCopy;
+// console.log(listCopy);
+//         li.sort((a, b) => {
+//             if (!isNaN(a.task) && !isNaN(b.task)) {
+//                 return parseInt(a.task) - parseInt(b.task);
+//             }
+//             if (!isNaN(a.task)) {
+//                 return -1;
+//             }
+//             if (!isNaN(b.task)) {
+//                 return 1;
+//             }
+//             return a.task.localeCompare(b.task);
+//         });
+//     console.log('lc',li);
