@@ -26,10 +26,7 @@ let arr;
 const emptyList = noData.hidden = false;
 todoInput.hidden = true
 
-// document.querySelector('body').addEventListener('click', () => {
-//     todoInput.removeEventListener('click', searchList);
-//     // console.log('removed');
-// })
+
 
 const updateUI = (e, obj = list) => {
     arr = obj
