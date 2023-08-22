@@ -20,6 +20,8 @@ let list = [];
 let active = [];
 let completed = [];
 
+let arr;
+
 
 const emptyList = noData.hidden = false;
 todoInput.hidden = true
@@ -30,6 +32,7 @@ todoInput.hidden = true
 // })
 
 const updateUI = (e, obj = list) => {
+    arr = obj
     updateUI.currList = obj;
     // console.log('ui', obj);
     if (obj.length == 0) {
@@ -72,11 +75,7 @@ const updateUI = (e, obj = list) => {
     listDelete.forEach((li) => {
         li.addEventListener('click', delHandle)
     })
-    // console.log(listDelete, listEdit);
-
-
-    // console.log(listElement);
-    // console.log(obj);
+    
 
     obj.forEach(li => {
         li.toggle = function () {
@@ -97,7 +96,7 @@ const updateUI = (e, obj = list) => {
 
 
 const sortHandler = () => {
-    let listCopy = updateUI.currList.slice();
+    let listCopy = arr.slice();
         listCopy.sort((a, b) => {
             if (!isNaN(a.task) && !isNaN(b.task)) {
                 return parseInt(a.task) - parseInt(b.task);
@@ -111,8 +110,9 @@ const sortHandler = () => {
             return a.task.localeCompare(b.task);
         });
     console.log('lc',listCopy);
+    console.log('li',arr);
 
-    let listtime = updateUI.currList.slice();
+    let listtime = arr.slice();
         listtime.sort((a, b) => {
             if (!isNaN(a.time) && !isNaN(b.time)) {
                 return parseInt(a.time) - parseInt(b.time);
