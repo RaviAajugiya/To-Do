@@ -217,21 +217,42 @@ const checkExist = (search) => {
     let arrObj = arr.filter((curr) => 
         curr.task.includes(search)
     );
+    console.log('len', arrObj);
+    console.log(arrObj.length == 0 ? false : true);
     return arrObj.length == 0 ? false : true
 }
 
 const searchHandler = (e) => {
-    if (e.key === 'Enter' && checkExist(todoInput.value.trim())) {
-        // console.log(arr.find((a) => a.task == todoInput.value.trim()));
-        console.log(arr.filter((curr) => curr.task.includes(todoInput.value.trim())));
-        updateUI(undefined, arr.filter((curr) => curr.task.includes(todoInput.value.trim())))
-
-    } else if (e.key === 'Enter' && checkExist(todoInput.value.trim())) {
-        todoInput.value = '';
-        updateUI(undefined, []);
-    } else if (e.key === 'Enter' || todoInput.value.trim() == '') {
-        updateUI(undefined);
+    if(e.key === 'Enter'){
+        if (checkExist(todoInput.value.trim())) {
+            // console.log(arr.find((a) => a.task == todoInput.value.trim()));
+            console.log(arr.filter((curr) => curr.task.includes(todoInput.value.trim())));
+            updateUI(undefined, arr.filter((curr) => curr.task.includes(todoInput.value.trim())))
+    
+        } 
+        else if (todoInput.value.trim() == '') {
+            updateUI(undefined);
+        }
+        else if (checkExist(todoInput.value.trim())) {
+            todoInput.value = '';
+            updateUI(undefined, []);
+        }  
     }
+
+
+        if (e.key === 'Enter' && checkExist(todoInput.value.trim())) {
+            // console.log(arr.find((a) => a.task == todoInput.value.trim()));
+            console.log(arr.filter((curr) => curr.task.includes(todoInput.value.trim())));
+            updateUI(undefined, arr.filter((curr) => curr.task.includes(todoInput.value.trim())))
+    
+        } 
+        else if (e.key === 'Enter' && !checkExist(todoInput.value.trim())) {
+            todoInput.value = '';
+            updateUI(undefined, []);
+        }  
+        else if ( e.key === 'Enter' || todoInput.value.trim() == '') {
+            updateUI(undefined);
+        }
 }
 
 const searchList = () => {
