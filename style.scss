@@ -53,7 +53,7 @@ section {
     .left {
         width: 100%;
         display: flex;
-        gap: .5em;
+        gap: 1em;
 
         .areaedit {
             width: 100%;
@@ -72,10 +72,14 @@ section {
 
 }
 
+#select{
+    width: 7em;
+}
+
 .footerContainer {
     flex: 25;
     display: flex;
-    gap: 2em;
+    gap: 0.6em;
     justify-content: center;
     align-items: center;
 

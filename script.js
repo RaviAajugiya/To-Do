@@ -31,7 +31,7 @@ todoInput.hidden = true
 const updateUI = (e, obj = list) => {
     arr = obj
     updateUI.currList = obj;
-    // console.log('ui', obj);
+    console.log('ui', obj);
     if (obj.length == 0) {
         noData.hidden = false;
     } else {
@@ -72,7 +72,7 @@ const updateUI = (e, obj = list) => {
     listDelete.forEach((li) => {
         li.addEventListener('click', delHandle)
     })
-    
+
 
     obj.forEach(li => {
         li.toggle = function () {
@@ -86,7 +86,8 @@ const updateUI = (e, obj = list) => {
 
     listElement.forEach((curr) => {
         curr.addEventListener('change', () => {
-            list.find((item) => item.id == curr.id.slice(-1)).toggle();
+            console.log('id', curr.id.slice(4));
+            list.find((item) => item.id == curr.id.slice(4)).toggle();
         })
     })
 }
@@ -94,37 +95,37 @@ const updateUI = (e, obj = list) => {
 
 const sortHandler = () => {
     let listCopy = arr.slice();
-        listCopy.sort((a, b) => {
-            if (!isNaN(a.task) && !isNaN(b.task)) {
-                return parseInt(a.task) - parseInt(b.task);
-            }
-            if (!isNaN(a.task)) {
-                return -1;
-            }
-            if (!isNaN(b.task)) {
-                return 1;
-            }
-            return a.task.localeCompare(b.task);
-        });
-    console.log('lc',listCopy);
-    console.log('li',arr);
+    listCopy.sort((a, b) => {
+        if (!isNaN(a.task) && !isNaN(b.task)) {
+            return parseInt(a.task) - parseInt(b.task);
+        }
+        if (!isNaN(a.task)) {
+            return -1;
+        }
+        if (!isNaN(b.task)) {
+            return 1;
+        }
+        return a.task.localeCompare(b.task);
+    });
+    console.log('lc', listCopy);
+    console.log('li', arr);
 
     let listtime = arr.slice();
-        listtime.sort((a, b) => {
-            if (!isNaN(a.time) && !isNaN(b.time)) {
-                return parseInt(a.time) - parseInt(b.time);
-            }
-            if (!isNaN(a.time)) {
-                return -1;
-            }
-            if (!isNaN(b.time)) {
-                return 1;
-            }
-            return a.time.localeCompare(b.time);
-        });
+    listtime.sort((a, b) => {
+        if (!isNaN(a.time) && !isNaN(b.time)) {
+            return parseInt(a.time) - parseInt(b.time);
+        }
+        if (!isNaN(a.time)) {
+            return -1;
+        }
+        if (!isNaN(b.time)) {
+            return 1;
+        }
+        return a.time.localeCompare(b.time);
+    });
 
-        console.log('obj', updateUI.currList);
-        console.log('listtime',listtime);
+    console.log('obj', updateUI.currList);
+    console.log('listtime', listtime);
 
     let sortType = sort.value;
     switch (sortType) {
@@ -147,12 +148,12 @@ sort.addEventListener('change', sortHandler);
 
 
 const editHandle = (e) => {
-    let editid = e.target.id.slice(-1);
+    let editid = e.target.id.slice(4);
     let editInput = document.querySelector(`#area${e.target.id}`);
     editInput.hidden = false;
     editInput.focus();
 
-    let labeledit = document.querySelector(`#label${e.target.id.slice(-1)}`);
+    let labeledit = document.querySelector(`#label${e.target.id.slice(4)}`);
     labeledit.hidden = true;
     console.log('editinp', editInput);
 
@@ -166,7 +167,7 @@ const editHandle = (e) => {
 }
 
 const delHandle = (e) => {
-    let delId = e.target.id.slice(-1)
+    let delId = e.target.id.slice(6)
     console.log(delId);
     console.log(list.findIndex((item) => item.id == delId));
     list.splice(list.findIndex((item) => item.id == delId), 1);
@@ -174,13 +175,7 @@ const delHandle = (e) => {
 
 }
 
-const checkExist = (search) => {
-    let arrObj = [];
-    list.forEach((curr) => {
-        arrObj.push(Object.values(curr));
-    })
-    return arrObj.flat().includes(search)
-}
+
 
 //add functionalaity
 let counter = 0;
@@ -196,7 +191,7 @@ const addList = (e) => {
 
         // console.log(list);
         todoInput.value = '';
-        updateUI(undefined, activeFind());
+        updateUI(undefined);
         noData.hidden = true;
 
     }
@@ -207,19 +202,24 @@ const addHandler = () => {
     noData.hidden = true;
     todoInput.hidden = false;
     todoInput.focus();
-    updateUI(undefined, activeFind());
+    updateUI(undefined);
     todoInput.addEventListener('keyup', addList);
 }
 add.addEventListener('click', addHandler);
 
+const checkExist = (search) => {
+    let arrObj = [];
+    arr.forEach((curr) => {
+        arrObj.push(Object.values(curr));
+    })
+    return arrObj.flat().includes(search)
+}
 
 const searchHandler = (e) => {
     if (e.key === 'Enter' && checkExist(todoInput.value.trim())) {
-        updateUI(undefined, [{
-            task: `${todoInput.value.trim()}`,
-            active: true,
-            completed: false
-        }]);
+        console.log(arr.find((a) => a.task == todoInput.value.trim()));
+
+        updateUI(undefined, [arr.find((a) => a.task == todoInput.value.trim())]);
     } else if (e.key === 'Enter' && !list.includes(todoInput.value.trim())) {
         todoInput.value = '';
         updateUI(undefined, []);
@@ -272,14 +272,9 @@ const selectionHandler = () => {
 
 select.addEventListener('change', selectionHandler);
 
-let activeFind = () => {
-    return list.filter(curr => curr.active);
-}
-
 allBtn.addEventListener('click', updateUI);
 activeBtn.addEventListener('click', () => {
-    console.log('act', active);
-    updateUI(undefined, activeFind());
+    updateUI(undefined, list.filter(curr => curr.active));
 });
 
 completeBtn.addEventListener('click', () => {
@@ -289,67 +284,19 @@ completeBtn.addEventListener('click', () => {
 });
 
 
-
-
-        // listtime.sort((a, b) => {
-        //     if (!isNaN(a.time) && !isNaN(b.time)) {
-        //         return parseInt(a.key) - parseInt(b.time);
-        //     }
-        //     if (!isNaN(a.time)) {
-        //         return -1;
-        //     }
-        //     if (!isNaN(b.time)) {
-        //         return 1;
-        //     }
-        //     return a.time.localeCompare(b.time);
-        // });
-
-        // console.log(listtime);
-
-
-// let listCopy = [
-//     {task: '5'},
-//     {task: 'zds'},
-//     {task: 'ewr'},
-//     {task: 'as5'},
-//     {task: '35'}
-// ];
-
-// let li = listCopy;
-// console.log(listCopy);
-//         li.sort((a, b) => {
-//             if (!isNaN(a.task) && !isNaN(b.task)) {
-//                 return parseInt(a.task) - parseInt(b.task);
-//             }
-//             if (!isNaN(a.task)) {
-//                 return -1;
-//             }
-//             if (!isNaN(b.task)) {
-//                 return 1;
-//             }
-//             return a.task.localeCompare(b.task);
-//         });
-//     console.log('lc',li);
-
 function selectButton(clickedButton) {
-    // Reset the background color of all buttons
-    var buttons=document.querySelectorAll('.button');
+    var buttons = document.querySelectorAll('.button');
 
-    buttons.forEach(function(button) {
-            button.style.backgroundColor= '#0076ff';
-        });
-
-    // Set the background color of the clicked button to white
-    clickedButton.style.backgroundColor='white';
+    buttons.forEach(function (button) {
+        button.style.backgroundColor = '#0076ff';
+    });
+    clickedButton.style.backgroundColor = 'white';
 }
 function selectBtn(clickedButton) {
-    // Reset the background color of all buttons
-    var btns=document.querySelectorAll('.btn');
+    var btns = document.querySelectorAll('.btn');
 
-    btns.forEach(function(button) {
-            button.style.backgroundColor= '#0076ff';
-        });
-
-    // Set the background color of the clicked button to white
-    clickedButton.style.backgroundColor='white';
+    btns.forEach(function (button) {
+        button.style.backgroundColor = '#0076ff';
+    });
+    clickedButton.style.backgroundColor = 'white';
 }

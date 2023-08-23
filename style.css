@@ -48,7 +48,7 @@ section h3 {
 .listContainer .left {
   width: 100%;
   display: flex;
-  gap: 0.5em;
+  gap: 1em;
 }
 .listContainer .left .areaedit {
   width: 100%;
@@ -61,10 +61,14 @@ section h3 {
   padding: 0.5em;
 }
 
+#select {
+  width: 7em;
+}
+
 .footerContainer {
   flex: 25;
   display: flex;
-  gap: 2em;
+  gap: 0.6em;
   justify-content: center;
   align-items: center;
   margin-bottom: 0.9em;
