@@ -1,22 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-body{
-    font-size: 1.2em;
+body {
+    font-size: 1em;
     font-family: 'Poppins', sans-serif;
 }
 
 h1 {
     text-align: center;
+    font-weight: 300;
 }
 
 
 section {
     width: 80%;
     margin: auto;
+
+    h3 {
+        font-weight: 200;
+        margin: 0.5em .3em;
+    }
 }
 
 #todo {
     width: 100%;
+    height: 1.3em;
+    font-size: 1em;
+    padding: .2em;
+    margin-bottom: .5em;
+    border-radius: 3px;
+
+    &:focus {
+        outline: 4px solid #9dd6ff;
+    }
+}
+
+#main {
+    margin-top: 5em;
 }
 
 .listContainer {
@@ -24,22 +43,29 @@ section {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgb(202, 202, 202);
+    padding: .1em;
+
+    .list {
+        width: 1.3em;
+        height: 1.3em;
+    }
 
     .left {
         width: 100%;
         display: flex;
+        gap: .5em;
 
         .areaedit {
             width: 100%;
         }
     }
 
-    .right{
+    .right {
         display: flex;
     }
 
     img {
-        width: 1.2em;
+        width: 1.1em;
         padding: .5em;
     }
 
@@ -47,25 +73,45 @@ section {
 }
 
 .footerContainer {
-    width: 30%;
+    flex: 25;
     display: flex;
-    justify-content: space-around;
+    gap: 2em;
+    justify-content: center;
     align-items: center;
 
+    margin-bottom: 0.9em;
+
     div {
-        select {
-            width: 100%;
-        }
+        text-wrap: nowrap;
     }
+
+    button {
+        font-size: 1.1em;
+        margin: -3px;
+        padding: 0.1em 0.5em;
+        box-sizing: border-box;
+        background-color: #0076ff;
+        border: 2px solid #0076ff;
+    }
+}
+
+select {
+    font-size: 1.1em;
+    padding: 0.1em 0.3em;
+    min-width: 2em;
 }
 
 footer {
     display: flex;
-    margin-top: 0.3em;
+    margin-top: 0.7em;
+    flex-wrap: wrap;
+
 
     img {
-        width: 1.2em;
-        padding: .5em;
+        width: 1.1em;
+        background-color: #0076ff;
+        padding: .3em .5em;
+        border: 2px solid #9dd6ff;
     }
 
     .add {
@@ -74,3 +120,12 @@ footer {
         justify-content: space-around;
     }
 }
+
+.btn {
+    // background-color: blue;
+    border: 2px solid #9dd6ff;
+    padding: .3em .7em;
+}
+
+
+

@@ -330,3 +330,26 @@ completeBtn.addEventListener('click', () => {
 //             return a.task.localeCompare(b.task);
 //         });
 //     console.log('lc',li);
+
+function selectButton(clickedButton) {
+    // Reset the background color of all buttons
+    var buttons=document.querySelectorAll('.button');
+
+    buttons.forEach(function(button) {
+            button.style.backgroundColor= '#0076ff';
+        });
+
+    // Set the background color of the clicked button to white
+    clickedButton.style.backgroundColor='white';
+}
+function selectBtn(clickedButton) {
+    // Reset the background color of all buttons
+    var btns=document.querySelectorAll('.btn');
+
+    btns.forEach(function(button) {
+            button.style.backgroundColor= '#0076ff';
+        });
+
+    // Set the background color of the clicked button to white
+    clickedButton.style.backgroundColor='white';
+}
