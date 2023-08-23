@@ -22,11 +22,8 @@ let completed = [];
 
 let arr;
 
-
 const emptyList = noData.hidden = false;
 todoInput.hidden = true
-
-
 
 const updateUI = (e, obj = list) => {
     arr = obj
@@ -143,6 +140,7 @@ const sortHandler = () => {
             updateUI(undefined, listtime.slice().reverse())
             break;
     }
+
 }
 sort.addEventListener('change', sortHandler);
 
@@ -152,17 +150,23 @@ const editHandle = (e) => {
     let editInput = document.querySelector(`#area${e.target.id}`);
     editInput.hidden = false;
     editInput.focus();
-
+    
     let labeledit = document.querySelector(`#label${e.target.id.slice(4)}`);
     labeledit.hidden = true;
     console.log('editinp', editInput);
-
+    
+    editInput.value = labeledit.textContent
     editInput.addEventListener('keyup', (e) => {
         if (e.key === 'Enter') {
             labeledit.hidden = false;
             list.find((item) => item.id == editid).task = labeledit.textContent = editInput.value;
             editInput.hidden = true;
         }
+    })
+
+    editInput.addEventListener('blur', () => {
+        editInput.hidden = true;
+        labeledit.hidden = false;
     })
 }
 
@@ -180,7 +184,7 @@ const delHandle = (e) => {
 //add functionalaity
 let counter = 0;
 const addList = (e) => {
-    if (e.key === 'Enter' && todoInput.value.trim() != '' && !checkExist(todoInput.value.trim())) {
+    if (e.key === 'Enter' && todoInput.value.trim() != '') {
         counter++;
         // console.log(counter);
         list.push({
@@ -208,19 +212,21 @@ const addHandler = () => {
 add.addEventListener('click', addHandler);
 
 const checkExist = (search) => {
-    let arrObj = [];
-    arr.forEach((curr) => {
-        arrObj.push(Object.values(curr));
-    })
-    return arrObj.flat().includes(search)
+    console.log(arr);
+    console.log(search);
+    let arrObj = arr.filter((curr) => 
+        curr.task.includes(search)
+    );
+    return arrObj.length == 0 ? false : true
 }
 
 const searchHandler = (e) => {
     if (e.key === 'Enter' && checkExist(todoInput.value.trim())) {
-        console.log(arr.find((a) => a.task == todoInput.value.trim()));
+        // console.log(arr.find((a) => a.task == todoInput.value.trim()));
+        console.log(arr.filter((curr) => curr.task.includes(todoInput.value.trim())));
+        updateUI(undefined, arr.filter((curr) => curr.task.includes(todoInput.value.trim())))
 
-        updateUI(undefined, [arr.find((a) => a.task == todoInput.value.trim())]);
-    } else if (e.key === 'Enter' && !list.includes(todoInput.value.trim())) {
+    } else if (e.key === 'Enter' && checkExist(todoInput.value.trim())) {
         todoInput.value = '';
         updateUI(undefined, []);
     } else if (e.key === 'Enter' || todoInput.value.trim() == '') {
@@ -267,7 +273,6 @@ const selectionHandler = () => {
             break;
     }
 
-
 }
 
 select.addEventListener('change', selectionHandler);
@@ -283,7 +288,14 @@ completeBtn.addEventListener('click', () => {
     updateUI(undefined, completed);
 });
 
+select.addEventListener('blur', () => {
+    select.value = 'Action';
+})
+sort.addEventListener('blur', () => {
+    sort.value = 'Sort';
+})
 
+//---------------------------UI------------------------------------//
 function selectButton(clickedButton) {
     var buttons = document.querySelectorAll('.button');
 
@@ -300,3 +312,4 @@ function selectBtn(clickedButton) {
     });
     clickedButton.style.backgroundColor = 'white';
 }
+
